@@ -159,4 +159,7 @@ class CustomerRequestController extends Controller
                 ->with('error', 'Failed to delete customer request. Please try again.');
         }
     }
+
+
+    
 }

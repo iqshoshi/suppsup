@@ -80,6 +80,98 @@
             gap: 8px;
         }
 
+        /* Filter and Search Section */
+        .filter-section {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .filter-select, .search-input {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            height: 40px;
+        }
+
+        .filter-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 8px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 32px;
+            min-width: 180px;
+        }
+
+        .search-input {
+            padding-right: 36px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='M21 21l-4.35-4.35'%3E%3C/path%3E%3C/svg%3E");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            min-width: 300px;
+            flex-grow: 1;
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .filter-select:hover, .search-input:hover {
+            border-color: #2383e2;
+        }
+
+        .filter-select:focus, .search-input:focus {
+            outline: none;
+            border-color: #2383e2;
+            box-shadow: 0 0 0 2px rgba(35, 131, 226, 0.1);
+        }
+
+        .reset-btn {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            height: 40px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reset-btn:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+        }
+
+        .search-hint {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
         .table-container {
             background: white;
             border-radius: 12px;
@@ -503,6 +595,15 @@
                 align-items: flex-start;
             }
             
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group, .search-input {
+                width: 100%;
+            }
+            
             .table-container {
                 overflow-x: auto;
             }
@@ -533,6 +634,46 @@
             {{ session('success') }}
         </div>
         @endif
+
+        {{-- Simplified Filter and Search Section --}}
+        <div class="filter-section">
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select class="filter-select" id="status-filter">
+                    <option value="">All Statuses</option>
+                    @foreach(['requested', 'ordered_from_vendor', 'ready_for_pickup', 'called_to_pickup', 'completed', 'cancelled', 'item_on_backorder', 'item_discontinued', 'called_item_in_bo', 'called_item_dcd'] as $status)
+                        <option value="{{ $status }}">
+                            @switch($status)
+                                @case('requested') 🔄 Requested @break
+                                @case('ordered_from_vendor') 📋 Ordered @break
+                                @case('ready_for_pickup') 📦 Ready @break
+                                @case('called_to_pickup') 📞 Called @break
+                                @case('completed') ✅ Completed @break
+                                @case('cancelled') ❌ Cancelled @break
+                                @case('item_on_backorder') ⏳ Backorder @break
+                                @case('item_discontinued') 🚫 Discontinued @break
+                                @case('called_item_in_bo') 📞 Called (BO) @break
+                                @case('called_item_dcd') 📞 Called (DCD) @break
+                            @endswitch
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="filter-group" style="flex-grow: 1;">
+                <label class="filter-label">Search</label>
+                <input type="text" class="search-input" id="search-input" 
+                       placeholder="Search anything... (use && for AND, || for OR)">
+                <div class="search-hint">
+                    Examples: "shoes && nike" or "john || jane" or "status:ready"
+                </div>
+            </div>
+
+            <button class="reset-btn" id="reset-filters">
+                <span>🔄</span>
+                Reset
+            </button>
+        </div>
 
         <div class="table-container">
             <table class="table">
@@ -936,6 +1077,116 @@
                     button.classList.remove('active');
                 });
             }
+        });
+
+        // Enhanced Filter and Search Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusFilter = document.getElementById('status-filter');
+            const searchInput = document.getElementById('search-input');
+            const resetBtn = document.getElementById('reset-filters');
+            const tableRows = document.querySelectorAll('.table tbody tr');
+
+            function filterTable() {
+                const statusValue = statusFilter.value.toLowerCase();
+                const searchQuery = searchInput.value.trim().toLowerCase();
+
+                tableRows.forEach(row => {
+                    if (row.querySelector('.empty-state')) return;
+
+                    // Status filter
+                    const statusSelect = row.querySelector('select.status-select');
+                    const status = statusSelect ? statusSelect.value.toLowerCase() : '';
+                    const matchesStatus = !statusValue || status === statusValue;
+
+                    // Get all searchable content from the row
+                    const rowData = {
+                        id: row.cells[0]?.textContent.toLowerCase() || '',
+                        sku: row.cells[1]?.textContent.toLowerCase() || '',
+                        vendor: row.cells[2]?.textContent.toLowerCase() || '',
+                        brand: row.cells[3]?.textContent.toLowerCase() || '',
+                        description: row.cells[4]?.textContent.toLowerCase() || '',
+                        quantity: row.cells[5]?.textContent.toLowerCase() || '',
+                        status: status,
+                        customer: '',
+                        associate: '',
+                        notes: ''
+                    };
+
+                    // Get customer info from tooltip if available
+                    const customerTooltip = row.querySelector('.tooltip div div:first-child');
+                    if (customerTooltip) {
+                        rowData.customer = customerTooltip.textContent.toLowerCase();
+                    }
+
+                    // Get associate info from tooltip if available
+                    const associateTooltip = row.querySelector('.tooltip div div:nth-child(2)');
+                    if (associateTooltip) {
+                        rowData.associate = associateTooltip.textContent.toLowerCase();
+                    }
+
+                    // Get notes from tooltip if available
+                    const notesTooltip = row.querySelector('.tooltip div div:nth-child(3)');
+                    if (notesTooltip) {
+                        rowData.notes = notesTooltip.textContent.toLowerCase();
+                    }
+
+                    // Advanced search parsing
+                    let matchesSearch = true;
+                    if (searchQuery) {
+                        // Check for advanced operators
+                        if (searchQuery.includes('&&') || searchQuery.includes('||')) {
+                            // Split by OR clauses first, then evaluate AND within each
+                            const orClauses = searchQuery.split('||').map(clause => clause.trim());
+                            matchesSearch = orClauses.some(orClause => {
+                                const andTerms = orClause.split('&&').map(term => term.trim());
+                                return andTerms.every(term => evaluateSearchTerm(term, rowData));
+                            });
+                        } else {
+                            // Simple search - all terms must match (AND)
+                            const terms = searchQuery.split(/\s+/).filter(term => term.length > 0);
+                            matchesSearch = terms.every(term => evaluateSearchTerm(term, rowData));
+                        }
+                    }
+
+                    if (matchesStatus && matchesSearch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            function evaluateSearchTerm(term, rowData) {
+                // Check for field-specific searches (e.g., "status:ready")
+                if (term.includes(':')) {
+                    const [field, value] = term.split(':').map(part => part.trim());
+                    switch (field) {
+                        case 'status': return rowData.status.includes(value);
+                        case 'vendor': return rowData.vendor.includes(value);
+                        case 'brand': return rowData.brand.includes(value);
+                        case 'sku': return rowData.sku.includes(value);
+                        case 'customer': return rowData.customer.includes(value);
+                        case 'associate': return rowData.associate.includes(value);
+                        case 'notes': return rowData.notes.includes(value);
+                        default: return false;
+                    }
+                }
+                
+                // General search - check all fields
+                return Object.values(rowData).some(value => value.includes(term));
+            }
+
+            statusFilter.addEventListener('change', filterTable);
+            searchInput.addEventListener('input', filterTable);
+
+            resetBtn.addEventListener('click', function() {
+                statusFilter.value = '';
+                searchInput.value = '';
+                filterTable();
+            });
+
+            // Initial filter in case there are URL parameters
+            filterTable();
         });
     </script>
 </body>
