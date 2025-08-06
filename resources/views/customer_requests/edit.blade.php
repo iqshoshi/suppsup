@@ -83,7 +83,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #f59e0b, #d97706, #b45309);
+            background: linear-gradient(90deg, #2383e2, #1a73d1, #0f5bb5);
         }
 
         .alert {
@@ -149,9 +149,9 @@
         .form-select:focus,
         .form-textarea:focus {
             outline: none;
-            border-color: #f59e0b;
+            border-color: #2383e2;
             background: white;
-            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.08);
+            box-shadow: 0 0 0 4px rgba(35, 131, 226, 0.08);
             transform: translateY(-1px);
         }
 
@@ -207,18 +207,18 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: linear-gradient(135deg, #2383e2, #1a73d1);
             color: white;
             border-color: transparent;
-            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+            box-shadow: 0 4px 14px rgba(35, 131, 226, 0.25);
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #d97706, #b45309);
+            background: linear-gradient(135deg, #1a73d1, #0f5bb5);
             color: white;
             text-decoration: none;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+            box-shadow: 0 6px 20px rgba(35, 131, 226, 0.35);
         }
 
         .btn-secondary {
@@ -330,22 +330,22 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label for="quantity" class="form-label">
-                            🔢 Quantity <span class="required">*</span>
+                    <div class="form-group full-width">
+                        <label for="product_description" class="form-label">
+                            📝 Product Name <span class="required">*</span>
                         </label>
-                        <input type="number" class="form-input" name="quantity" id="quantity" required placeholder="Enter quantity" min="1" value="{{ old('quantity', $request->quantity) }}">
-                        @error('quantity')
+                        <textarea class="form-textarea" name="product_description" id="product_description" required placeholder="Enter product name...">{{ old('product_description', $request->product_description) }}</textarea>
+                        @error('product_description')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="product_description" class="form-label">
-                            📝 Product Description <span class="required">*</span>
+                        <label for="quantity" class="form-label">
+                            🔢 Quantity <span class="required">*</span>
                         </label>
-                        <textarea class="form-textarea" name="product_description" id="product_description" required placeholder="Enter detailed product description...">{{ old('product_description', $request->product_description) }}</textarea>
-                        @error('product_description')
+                        <input type="number" class="form-input" name="quantity" id="quantity" required placeholder="Enter quantity" min="1" value="{{ old('quantity', $request->quantity) }}">
+                        @error('quantity')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
@@ -370,7 +370,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group full-width">
                         <label for="associate" class="form-label">
                             👨‍💼 Associate <span class="required">*</span>
                         </label>

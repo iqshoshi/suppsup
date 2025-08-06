@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 32px 24px;
         }
@@ -93,25 +93,25 @@
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            min-width: 1200px;
+            min-width: 1400px;
         }
 
-        /* Fixed column widths to prevent overflow issues */
-        .table colgroup col:nth-child(1) { width: 60px; }   /* ID */
-        .table colgroup col:nth-child(2) { width: 120px; }  /* SKU Code */
-        .table colgroup col:nth-child(3) { width: 100px; }  /* Vendor */
-        .table colgroup col:nth-child(4) { width: 100px; }  /* Brand */
-        .table colgroup col:nth-child(5) { width: 200px; }  /* Description */
-        .table colgroup col:nth-child(6) { width: 60px; }   /* Qty */
-        .table colgroup col:nth-child(7) { width: 140px; }  /* Status */
-        .table colgroup col:nth-child(8) { width: 80px; }   /* Details */
-        .table colgroup col:nth-child(9) { width: 100px; }  /* Created */
-        .table colgroup col:nth-child(10) { width: 80px; }  /* Actions */
+        /* Improved column widths for better space distribution */
+        .table colgroup col:nth-child(1) { width: 70px; }   /* ID */
+        .table colgroup col:nth-child(2) { width: 140px; }  /* SKU Code */
+        .table colgroup col:nth-child(3) { width: 120px; }  /* Vendor */
+        .table colgroup col:nth-child(4) { width: 120px; }  /* Brand */
+        .table colgroup col:nth-child(5) { width: 280px; }  /* Description - increased */
+        .table colgroup col:nth-child(6) { width: 80px; }   /* Qty */
+        .table colgroup col:nth-child(7) { width: 160px; }  /* Status - increased */
+        .table colgroup col:nth-child(8) { width: 100px; }  /* Details */
+        .table colgroup col:nth-child(9) { width: 120px; }  /* Created */
+        .table colgroup col:nth-child(10) { width: 100px; } /* Actions */
 
         .table th {
             background: #f8f9fa;
-            padding: 12px 8px;
-            text-align: left;
+            padding: 12px;
+            text-align: center;
             font-weight: 600;
             font-size: 12px;
             color: #6b7280;
@@ -156,13 +156,12 @@
         }
 
         .table td {
-            padding: 12px 8px;
+            padding: 12px;
             border-bottom: 1px solid #f3f4f6;
             font-size: 13px;
             vertical-align: middle;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            text-align: center;
+            position: relative;
         }
 
         .table tr:hover {
@@ -173,27 +172,53 @@
             border-bottom: none;
         }
 
-        /* Special handling for description text that can wrap */
-        .table td.description-cell {
-            white-space: normal;
-            line-height: 1.4;
-            max-height: 3.4em;
+        /* Text cell styling - removed hover effects */
+        .text-cell {
             overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            word-break: break-word;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 0;
+        }
+
+        .text-content {
+            display: block;
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Description cell styling - removed hover effects */
+        .description-cell {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 0;
+        }
+
+        .description-content {
+            display: block;
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .status-select {
             background: transparent;
             border: 1px solid #e5e7eb;
             border-radius: 6px;
-            padding: 4px 6px;
-            font-size: 11px;
+            padding: 6px 8px;
+            font-size: 12px;
             cursor: pointer;
             width: 100%;
             transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 8px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 32px;
         }
 
         .status-select:hover {
@@ -206,22 +231,31 @@
             box-shadow: 0 0 0 2px rgba(35, 131, 226, 0.1);
         }
 
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
+        /* Days counter styling */
+        .days-counter {
+            margin-top: 4px;
+            font-size: 10px;
+            color: #6b7280;
             font-weight: 500;
-            padding: 4px 8px;
-            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
         }
 
-        .status-requested { background: #fef3c7; color: #92400e; }
-        .status-ordered { background: #dbeafe; color: #1e40af; }
-        .status-arrived { background: #d1fae5; color: #065f46; }
-        .status-called_for_pickup { background: #fce7f3; color: #be185d; }
-        .status-fulfilled { background: #dcfce7; color: #166534; }
-        .status-customer_cancelled { background: #fee2e2; color: #991b1b; }
+        .days-counter.urgent {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .days-counter.warning {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .days-counter.normal {
+            color: #059669;
+        }
 
         .edit-btn {
             background: #f3f4f6;
@@ -290,7 +324,7 @@
         .id-badge {
             background: #f3f4f6;
             color: #6b7280;
-            padding: 2px 6px;
+            padding: 4px 8px;
             border-radius: 4px;
             font-size: 11px;
             font-weight: 500;
@@ -302,6 +336,7 @@
         .date-text {
             color: #6b7280;
             font-size: 11px;
+            white-space: nowrap;
         }
 
         .info-btn {
@@ -393,61 +428,68 @@
         .sku-code {
             background: #f3f4f6;
             border: 1px solid #d1d5db;
-            padding: 4px 6px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            display: block;
-            position: relative;
+            display: inline-block;
             font-size: 11px;
             text-align: center;
+            word-break: break-all;
+            line-height: 1.3;
+            min-width: 80px;
+            max-width: 120px;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .sku-code:hover {
             background: #e5e7eb;
             border-color: #2383e2;
-            overflow: visible;
-            white-space: normal;
-            z-index: 50;
+            transform: scale(1.02);
         }
 
         .sku-code:active {
             background: #d1d5db;
+            transform: scale(0.98);
         }
 
+        /* Improved copy feedback positioning */
         .copy-feedback {
             position: fixed;
             background: #10b981;
             color: white;
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-radius: 6px;
             font-size: 12px;
+            font-weight: 500;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
             white-space: nowrap;
             z-index: 10002;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(-50%);
         }
 
         .copy-feedback.show {
             opacity: 1;
         }
 
-        /* FIXED: Removed hover effects from brand and vendor cells */
-        .brand-cell, .vendor-cell {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
         .qty-cell {
             text-align: center;
             font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Responsive design improvements */
+        @media (max-width: 1200px) {
+            .table {
+                min-width: 1200px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -495,16 +537,16 @@
         <div class="table-container">
             <table class="table">
                 <colgroup>
-                    <col style="width: 60px;">
+                    <col style="width: 70px;">
+                    <col style="width: 140px;">
+                    <col style="width: 120px;">
+                    <col style="width: 120px;">
+                    <col style="width: 280px;">
+                    <col style="width: 80px;">
+                    <col style="width: 160px;">
+                    <col style="width: 100px;">
                     <col style="width: 120px;">
                     <col style="width: 100px;">
-                    <col style="width: 100px;">
-                    <col style="width: 200px;">
-                    <col style="width: 60px;">
-                    <col style="width: 140px;">
-                    <col style="width: 80px;">
-                    <col style="width: 100px;">
-                    <col style="width: 80px;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -551,46 +593,76 @@
                             <span class="id-badge">#{{ $r->id }}</span>
                         </td>
                         <td>
-                            <span class="sku-code" onclick="copyToClipboard('{{ $r->sku_code }}', this)" title="{{ $r->sku_code }}">
+                            <span class="sku-code" onclick="copyToClipboard('{{ $r->sku_code }}', event)" title="Click to copy: {{ $r->sku_code }}">
                                 {{ $r->sku_code }}
-                                <span class="copy-feedback">Copied!</span>
                             </span>
                         </td>
-                        <td class="vendor-cell" title="{{ $r->vendor }}">{{ $r->vendor }}</td>
-                        <td class="brand-cell" title="{{ $r->brand }}">{{ $r->brand }}</td>
-                        <td class="description-cell" title="{{ $r->product_description }}">{{ $r->product_description }}</td>
+                        <td class="text-cell">
+                            <span class="text-content" title="{{ $r->vendor }}">{{ $r->vendor }}</span>
+                        </td>
+                        <td class="text-cell">
+                            <span class="text-content" title="{{ $r->brand }}">{{ $r->brand }}</span>
+                        </td>
+                        <td class="description-cell">
+                            <span class="description-content" title="{{ $r->product_description }}">{{ $r->product_description }}</span>
+                        </td>
                         <td class="qty-cell">{{ $r->quantity }}</td>
                         <td>
                             <form action="{{ route('customer-requests.update', $r->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <select name="status" onchange="this.form.submit()" class="status-select">
-                                    @foreach(['requested', 'ordered', 'arrived', 'called_for_pickup', 'fulfilled', 'customer_cancelled'] as $status)
+                                    @foreach(['requested', 'ordered_from_vendor', 'ready_for_pickup', 'called_to_pickup', 'completed', 'cancelled', 'item_on_backorder', 'item_discontinued', 'called_item_in_bo', 'called_item_dcd'] as $status)
                                     <option value="{{ $status }}" {{ $r->status === $status ? 'selected' : '' }}>
                                         @switch($status)
                                             @case('requested')
                                                 🔄 Requested
                                                 @break
-                                            @case('ordered')
+                                            @case('ordered_from_vendor')
                                                 📋 Ordered
                                                 @break
-                                            @case('arrived')
-                                                📦 Arrived
+                                            @case('ready_for_pickup')
+                                                📦 Ready
                                                 @break
-                                            @case('called_for_pickup')
+                                            @case('called_to_pickup')
                                                 📞 Called
                                                 @break
-                                            @case('fulfilled')
-                                                ✅ Fulfilled
+                                            @case('completed')
+                                                ✅ Completed
                                                 @break
-                                            @case('customer_cancelled')
+                                            @case('cancelled')
                                                 ❌ Cancelled
+                                                @break
+                                            @case('item_on_backorder')
+                                                ⏳ Backorder
+                                                @break
+                                            @case('item_discontinued')
+                                                🚫 Discontinued
+                                                @break
+                                            @case('called_item_in_bo')
+                                                📞 Called (BO)
+                                                @break
+                                            @case('called_item_dcd')
+                                                📞 Called (DCD)
                                                 @break
                                         @endswitch
                                     </option>
                                     @endforeach
                                 </select>
                             </form>
+                            
+                            {{-- Days counter under status - only for called_to_pickup --}}
+                            @if($r->status === 'called_to_pickup' && isset($r->called_to_pickup_at))
+                                @php
+                                    $daysCount = $r->called_to_pickup_at->diffInDays(now());
+                                    $counterClass = $daysCount >= 7 ? 'urgent' : ($daysCount >= 3 ? 'warning' : 'normal');
+                                    $counterText = $daysCount === 0 ? 'Called today' : "Called {$daysCount} day" . ($daysCount > 1 ? 's' : '') . " ago";
+                                @endphp
+                                <div class="days-counter {{ $counterClass }}">
+                                    <span>⏰</span>
+                                    <span>{{ $counterText }}</span>
+                                </div>
+                            @endif
                         </td>
                         <td>
                             <div class="details-buttons">
@@ -662,26 +734,34 @@
         </div>
     </div>
 
+    <!-- Global copy feedback element -->
+    <div id="copyFeedback" class="copy-feedback">Copied!</div>
+
     <script>
         let currentSort = { column: 0, direction: 'desc' }; // Default sort by ID descending
 
-        function copyToClipboard(text, element) {
+        function copyToClipboard(text, event) {
+            event.stopPropagation();
+            
             // Create a temporary textarea element
             const tempTextArea = document.createElement('textarea');
             tempTextArea.value = text;
+            tempTextArea.style.position = 'fixed';
+            tempTextArea.style.left = '-999999px';
+            tempTextArea.style.top = '-999999px';
             document.body.appendChild(tempTextArea);
+            tempTextArea.focus();
             tempTextArea.select();
-            tempTextArea.setSelectionRange(0, 99999); // For mobile devices
             
             try {
                 document.execCommand('copy');
-                showCopyFeedback(element);
+                showCopyFeedback(event);
             } catch (err) {
                 console.error('Could not copy text: ', err);
                 // Fallback to newer API if available
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(text).then(function() {
-                        showCopyFeedback(element);
+                        showCopyFeedback(event);
                     }).catch(function(err) {
                         console.error('Could not copy text: ', err);
                     });
@@ -691,17 +771,17 @@
             document.body.removeChild(tempTextArea);
         }
 
-        function showCopyFeedback(element) {
-            const feedback = element.querySelector('.copy-feedback');
-            const rect = element.getBoundingClientRect();
+        function showCopyFeedback(event) {
+            const feedback = document.getElementById('copyFeedback');
+            const rect = event.target.getBoundingClientRect();
             
             // Position the feedback above the element, centered
-            const left = rect.left + (rect.width / 2) - (feedback.offsetWidth / 2);
-            const top = rect.top - feedback.offsetHeight - 8;
+            const centerX = rect.left + (rect.width / 2);
+            const topY = rect.top - 40;
             
-            // Adjust if it goes off screen
-            const adjustedLeft = Math.max(10, Math.min(left, window.innerWidth - feedback.offsetWidth - 10));
-            const adjustedTop = Math.max(10, top);
+            // Ensure it doesn't go off screen
+            const adjustedLeft = Math.max(10, Math.min(centerX, window.innerWidth - 60));
+            const adjustedTop = Math.max(10, topY);
             
             feedback.style.left = adjustedLeft + 'px';
             feedback.style.top = adjustedTop + 'px';
@@ -795,7 +875,6 @@
             if (!isCurrentlyOpen) {
                 // Position the tooltip
                 const rect = button.getBoundingClientRect();
-                const tooltipRect = tooltip.getBoundingClientRect();
                 
                 // Calculate position (try to center under button, but adjust if it goes off screen)
                 let left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2);

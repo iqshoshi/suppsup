@@ -298,15 +298,15 @@
 
                     <div class="form-group full-width">
                         <label for="product_description" class="form-label">
-                            📝 Product Description <span class="required">*</span>
+                            📝 Product Name <span class="required">*</span>
                         </label>
-                        <textarea class="form-textarea" name="product_description" id="product_description" required placeholder="Enter detailed product description...">{{ old('product_description') }}</textarea>
+                        <textarea class="form-textarea" name="product_description" id="product_description" required placeholder="Enter product name...">{{ old('product_description') }}</textarea>
                         @error('product_description')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group full-width">
                         <label for="quantity" class="form-label">
                             🔢 Quantity <span class="required">*</span>
                         </label>
@@ -336,7 +336,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group full-width">
                         <label for="associate" class="form-label">
                             👨‍💼 Associate <span class="required">*</span>
                         </label>

@@ -26,15 +26,18 @@ return new class extends Migration
 
             $table->enum('status', [
                 'requested',
-                'ordered',
-                'arrived',
-                'fulfilled',
-                'customer_cancelled',
+                'ordered_from_vendor',
+                'ready_for_pickup',
+                'called_to_pickup',
+                'completed',
+                'cancelled',
                 'item_on_backorder',
                 'item_discontinued',
+                'called_item_in_bo',
+                'called_item_dcd',
             ])->default('requested');
 
-$table->boolean('called')->default(false);
+            $table->timestamp('called_to_pickup_at')->nullable();
 
             $table->text('notes')->nullable();      // Additional notes if needed
 
