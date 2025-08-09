@@ -39,7 +39,7 @@ class CustomerRequestController extends Controller
             'customer_name' => 'required|string|max:255',
             'contact_no' => 'required|string|max:255',
             'associate' => 'required|string|max:255',
-            'status' => 'required|in:requested,ordered,arrived,called_for_pickup,fulfilled,customer_cancelled',
+            'status' => 'required|in:' . implode(',', CustomerRequest::STATUSES),
             'notes' => 'nullable|string',
         ]);
 

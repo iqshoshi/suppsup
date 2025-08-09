@@ -35,6 +35,8 @@ return new class extends Migration
                 'item_discontinued',
                 'called_item_in_bo',
                 'called_item_dcd',
+                'called_did_not_pickup',       // New
+                'called_went_to_voicemail',    // New
             ])->default('requested');
 
             $table->timestamp('called_to_pickup_at')->nullable();
