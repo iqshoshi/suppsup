@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
 
-# Wait for PostgreSQL (with timeout)
-timeout 30s bash -c 'until php artisan db:monitor >/dev/null 2>&1; do sleep 1; done'
+# Wait for PostgreSQL to be ready
+echo "Waiting for PostgreSQL at ${DB_HOST}:${DB_PORT}..."
+until nc -z "$DB_HOST" "$DB_PORT"; do
+  sleep 1
+done
+echo "PostgreSQL is ready."
 
 # Run migrations
 php artisan migrate --force
 
-# Clear cache
+# Clear caches
 php artisan optimize:clear
 
 # Start Apache
