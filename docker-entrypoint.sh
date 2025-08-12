@@ -1,15 +1,27 @@
 #!/bin/bash
 set -e
 
-# Wait for PostgreSQL to be ready
+# Wait for PostgreSQL
 echo "Waiting for PostgreSQL at ${DB_HOST}:${DB_PORT}..."
-until nc -z "$DB_HOST" "$DB_PORT"; do
-  sleep 1
+for i in {1..30}; do
+    if command -v nc >/dev/null 2>&1 && nc -z "$DB_HOST" "$DB_PORT"; then
+        echo "PostgreSQL is ready."
+        break
+    fi
+    echo "PostgreSQL not ready yet... ($i/30)"
+    sleep 1
+    if [ $i -eq 30 ]; then
+        echo "Error: PostgreSQL did not become ready in time."
+        exit 1
+    fi
 done
-echo "PostgreSQL is ready."
 
-# Run migrations
-php artisan migrate --force
+# Run migrations only if pending
+if php artisan migrate:status | grep -q "Pending"; then
+    php artisan migrate --force
+else
+    echo "No pending migrations."
+fi
 
 # Clear caches
 php artisan optimize:clear
