@@ -17,11 +17,13 @@ for i in {1..30}; do
 done
 
 # Run migrations only if pending
+# Run migrations safely (don’t crash if duplicate table exists)
 if php artisan migrate:status | grep -q "Pending"; then
-    php artisan migrate --force
+    php artisan migrate --force || echo "⚠️ Migration failed, skipping..."
 else
     echo "No pending migrations."
 fi
+
 
 # Clear caches
 php artisan optimize:clear
